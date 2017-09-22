@@ -105,11 +105,12 @@
 
       $('#modal-setting').on('show.bs.modal', function (e) {
         var modal = $(this);
+        var inputSeconds = modal.find('#input-seconds');
 
-        modal.find('#input-seconds').val(defaultSeconds);
+        inputSeconds.val(defaultSeconds);
 
         modal.find('.btn-update').on('click', function () {
-          defaultSeconds = $('#input-seconds').val() || defaultSeconds;
+          setSeconds(inputSeconds.val());
           resetCountdown();
           modal.modal('hide');
         })
