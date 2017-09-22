@@ -60,18 +60,15 @@
     }
 
     function setSeconds(seconds) {
-      seconds = seconds || defaultSeconds;
-      defaultSeconds = seconds;
+      defaultSeconds = seconds || defaultSeconds;
     }
 
-    function Beep() {
-      var Beep = new Audio('audio/Beep.mp3');
-      Beep.play();
+    function playBeep() {
+      new Audio('audio/Beep.mp3').play();
     }
 
-    function BeepEnd() {
-      var Beep = new Audio('audio/beep-05.mp3');
-      Beep.play();
+    function playBeepEnd() {
+      new Audio('audio/beep-05.mp3').play();
     }
 
     function startCoundown(seconds) {
@@ -79,11 +76,11 @@
 
       $('#counter').countdown(new Date().getTime() + seconds * 1000, function (event) {
         if (event.type == 'update') {
-          Beep();
+          playBeep();
         }
 
         if (event.type == 'finish') {
-          BeepEnd();
+          playBeepEnd();
         }
 
         $(this).html(event.strftime('%-S'));
@@ -106,7 +103,7 @@
         resetCountdown();
       })
 
-      $('#modal-setting').on('shown.bs.modal', function (e) {
+      $('#modal-setting').on('show.bs.modal', function (e) {
         var modal = $(this);
 
         modal.find('#input-seconds').val(defaultSeconds);
