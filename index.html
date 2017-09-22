@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Countdown</title>
+
+  <link rel="stylesheet" type="text/css" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="bower_components/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="css/countdown.css">
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6 col-sm-offset-3">
+        <div class="panel panel-primary panel-countdown">
+          <div class="panel-heading">
+            <h3 class="panel-title text-center">SISA WAKTU</h3>
+          </div>
+          <div class="panel-body">
+            <div class="counter text-center" id="counter"></div>
+          </div>
+          <div class="panel-footer">
+            <button type="button" class="btn btn-default pull-right" data-toggle="modal" data-target="#modal-setting"><i class="fa fa-cog"></i> Setting</button>
+
+            <div class="text-center">
+              <button type="button" class="btn btn-primary btn-start"><i class="fa fa-play"></i> Mulai</button>
+              <button type="button" class="btn btn-danger btn-reset"><i class="fa fa-refresh"></i> Reset</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modal-setting">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title">Time</h4>
+        </div>
+        <div class="modal-body">
+          <input type="number" id="input-seconds" class="form-control input-lg">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Batal</button>
+          <button type="button" class="btn btn-primary btn-update">Simpan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="bower_components/jquery.countdown/dist/jquery.countdown.js"></script>
+  <script type="text/javascript">
+    var defaultSeconds = 5;
+
+    function getSeconds() {
+      return defaultSeconds;
+    }
+
+    function setSeconds(seconds) {
+      seconds = seconds || defaultSeconds;
+      defaultSeconds = seconds;
+    }
+
+    function Beep() {
+      var Beep = new Audio('audio/Beep.mp3');
+      Beep.play();
+    }
+
+    function BeepEnd() {
+      var Beep = new Audio('audio/beep-05.mp3');
+      Beep.play();
+    }
+
+    function startCoundown(seconds) {
+      seconds = seconds || getSeconds();
+
+      $('#counter').countdown(new Date().getTime() + seconds * 1000, function (event) {
+        if (event.type == 'update') {
+          Beep();
+        }
+
+        if (event.type == 'finish') {
+          BeepEnd();
+        }
+
+        $(this).html(event.strftime('%-S'));
+      });
+    }
+
+    function resetCountdown() {
+      $('#counter').html(getSeconds());
+    }
+
+    $(function () {
+      $('#counter').html(getSeconds());
+
+      $('.btn-start').on('click', function () {
+        startCoundown();
+      })
+
+      $('.btn-reset').on('click', function () {
+        $('#counter').countdown('pause');
+        resetCountdown();
+      })
+
+      $('#modal-setting').on('shown.bs.modal', function (e) {
+        var modal = $(this);
+
+        modal.find('#input-seconds').val(defaultSeconds);
+
+        modal.find('.btn-update').on('click', function () {
+          defaultSeconds = $('#input-seconds').val() || defaultSeconds;
+          resetCountdown();
+          modal.modal('hide');
+        })
+      })
+    })
+  </script>
+</body>
+</html>
